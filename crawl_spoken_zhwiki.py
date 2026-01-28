@@ -308,13 +308,17 @@ def main():
 
             try:
                 download_file(url, dest_path)
-                # 禮貌限速
-                time.sleep(1.0)
+                # 禮貌限速，避免 429 錯誤
+                time.sleep(3.0)
             except Exception as e:
                 print(f"  下載檔案失敗: {e}")
+                # 如果遇到 429 錯誤，等待更久
+                if "429" in str(e):
+                    print(f"  遇到速率限制，等待 30 秒後繼續...")
+                    time.sleep(30)
 
         # 每個條目之間稍微 sleep，避免太頻繁
-        time.sleep(0.5)
+        time.sleep(1.0)
 
 
 if __name__ == "__main__":
